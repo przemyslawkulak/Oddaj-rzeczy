@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -10,7 +11,9 @@ from app.forms import LoginForm
 
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'index.html')
+        return render(request, 'app/index.html')
+
+
 # class LandingPageView(View):
 #     def get(self, request):
 #         return render(request, 'index.html')
@@ -19,7 +22,7 @@ class LandingPageView(LoginRequiredMixin, View):
 class LoginView(View):
     def get(self, request):
         form = LoginForm()
-        return render(request, 'login.html')
+        return render(request, 'app/login.html')
 
     def post(self, request):
         '''
@@ -36,12 +39,48 @@ class LoginView(View):
                 login(request, user)  # logujemy
                 return redirect('landing-page')
                 # jeśli uda się zalogować przerzuca nas na główną stronę
-            return render(request, 'login.html')
+            return render(request, 'app/login.html')
             # jeśli nie uda się zalogować wraca na formularz
-        return render(request, 'login.html')
+        return render(request, 'app/login.html')
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)  # wylogowanie
         return redirect('login')
+
+
+class RegisterView(View):
+    def get(self, request):
+        return render(request, 'app/register.html')
+
+    def post(self, request):
+        username = request.POST.get("login")
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        password = request.POST.get('password')
+        confirmPassword = request.POST.get('password2')
+        users = User.objects.all()
+        usernames = []
+        emails = []
+        for i in users:
+            emails.append(i.email)
+            usernames.append(i.username)
+        if username and email and name and surname and password and confirmPassword and password == confirmPassword:
+            if username in usernames:
+                text = 'Podany user już istnieje'
+                return render(request, 'app/register.html', {"text": text})
+            elif email in emails:
+                text = 'Podany email już istnieje'
+                return render(request, 'app/register.html', {"text": text})
+            else:
+                User.objects.create_user(username=username,
+                                         email=email,
+                                         first_name=name,
+                                         last_name=surname,
+                                         password=password,
+                                         )
+                return redirect('login')
+        text = 'Żle powtórzone hasło'
+        return render(request, 'app/register.html', {"text": text})
