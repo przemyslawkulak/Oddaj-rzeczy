@@ -18,7 +18,6 @@ class Institution(models.Model):
 
 
 class Gift(models.Model):
-    name = models.CharField(max_length=255)
     date = models.DateTimeField(null=True)
     given = models.BooleanField(default=False)
     clothes_to_us = models.IntegerField(null=True)
