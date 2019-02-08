@@ -132,3 +132,8 @@ class ProfileView(View):
             return render(request, 'app/profile.html', {"text": text})
         text = 'Żle powtórzone hasło'
         return render(request, 'app/profile.html', {"text": text})
+
+
+class DonateView(View):
+    def get(self, request):
+        return render(request, 'app/form.html')
