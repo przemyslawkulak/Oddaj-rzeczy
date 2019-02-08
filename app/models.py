@@ -13,8 +13,8 @@ TYPE = (
 class Institution(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    mission = models.TextField()
-    type = models.IntegerField(choices=TYPE)
+    mission = models.TextField(null=True)
+    type = models.IntegerField(choices=TYPE, default=1)
 
 
 class Gift(models.Model):
