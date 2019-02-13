@@ -14,11 +14,13 @@
         <ul class="nav--actions">
           {% if user %}
             <li><a href="{% url 'profile' %}" class="btn btn--small btn--without-border">Witaj {{user.username}} </a></li>
+
           <li><a href="{% url 'logout' %}" class="btn btn--small btn--without-border"> Wyloguj</a></li>
           {% else %}
           <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
           {% endif %}
           <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+
         </ul>
 
         <ul>
@@ -31,6 +33,6 @@
       </nav>
         {% block content %}
         {% endblock %}
-    <script src="../../../static/js/app.js"></script>
+    <script src="../../static/js/app.js"></script>
   </body>
 </html>

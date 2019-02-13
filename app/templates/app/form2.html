@@ -67,11 +67,11 @@
       <div class="form--steps-instructions">
         <div class="form--steps-container">
           <h3>Ważne!</h3>
-          <p data-step="1" class="active">
+          <p data-step="1" >
             Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
             wiedzieć komu najlepiej je przekazać.
           </p>
-          <p data-step="2">
+          <p data-step="2" class="active">
             Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
             wiedzieć komu najlepiej je przekazać.
           </p>
@@ -90,71 +90,13 @@
       </div>
 
       <div class="form--steps-container">
-        <div class="form--steps-counter">Krok <span>1</span>/5</div>
+        <div class="form--steps-counter">Krok <span>2</span>/5</div>
 
         <form method="POST">
-          <!-- STEP 1: class .active is switching steps -->
-          <div data-step="1" class="active" >
-            <h3>Zaznacz co chcesz oddać:</h3>
 
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  name="products1"
-                  value="clothes-to-use"
-                />
-                <span class="checkbox"></span>
-                <span class="description"
-                  >ubrania, które nadają się do ponownego użycia</span
-                >
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  name="products2"
-                  value="clothes-useless"
-                />
-                <span class="checkbox"></span>
-                <span class="description">ubrania, do wyrzucenia</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="products3" value="toys" />
-                <span class="checkbox"></span>
-                <span class="description">zabawki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="products4" value="books" />
-                <span class="checkbox"></span>
-                <span class="description">książki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="products5" value="other" />
-                <span class="checkbox"></span>
-                <span class="description">inne</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--buttons">
-              <button type="submit" class="btn next-step">Dalej</button>
-            </div>
-          </div>
-        </form>
 
           <!-- STEP 2 -->
-          <div data-step="2" >
+          <div data-step="2" class="active" >
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
 
             <div class="form-group form-group--inline">
@@ -426,6 +368,6 @@
       </div>
     </footer>
 
-    <script src="../../static/js/app.js"></script>
+
   </body>
 </html>

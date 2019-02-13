@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from app.forms import LoginForm
+from app.models import Gift
 
 
 class LandingPageView(LoginRequiredMixin, View):
@@ -134,6 +135,31 @@ class ProfileView(View):
         return render(request, 'app/profile.html', {"text": text})
 
 
-class DonateView(View):
+class Donate1View(View):
     def get(self, request):
-        return render(request, 'app/form.html')
+        return render(request, 'app/form1.html')
+
+    def post(self, request):
+        l = request.POST.getlist('products')
+        clothes_to_use, clothes_useless, toys, books, others = 0, 0, 0, 0, 0
+        if request.POST.get('products1', False):
+            clothes_to_use = 1
+        if request.POST.get('products2', False):
+            clothes_useless = 1
+        if request.POST.get('products3', False):
+            toys = 1
+        if request.POST.get('products4', False):
+            books = 1
+        if request.POST.get('products5', False):
+            others = 1
+        g = Gift.objects.create(clothes_to_use=clothes_to_use, clothes_useless=clothes_useless,
+                                toys=toys, books=books, others=others)
+        request.session['gift'] = g.id
+        return redirect('donate2')
+
+
+class Donate2View(View):
+    def get(self, request):
+        if request.session['gift']:
+            return render(request, 'app/form2.html')
+        return redirect('donate1')
