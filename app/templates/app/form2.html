@@ -93,22 +93,48 @@
         <div class="form--steps-counter">Krok <span>2</span>/5</div>
 
         <form method="POST">
-
+           {% csrf_token %}
 
           <!-- STEP 2 -->
           <div data-step="2" class="active" >
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
 
             <div class="form-group form-group--inline">
+              {% if gift.clothes_to_use %}
               <label>
-                Liczba 60l worków:
-                <input type="number" name="bags" step="1" min="1" />
+                Liczba 60l worków ubrań do ponownego użycia:
+                <input type="number" name="clothes_to_use" step="1" min="1"  value="{{gift.clothes_to_use}}"/><br>
               </label>
+              {% endif %}
+                {% if gift.clothes_useless %}
+              <label>
+                Liczba 60l worków ubrań wyrzucenia:
+                <input type="number" name="clothes_useless" step="1" min="1"  value='{{gift.clothes_useless}}'/><br>
+              </label>
+              {% endif %}
+                {% if gift.toys %}
+              <label>
+                Liczba 60l worków zabawek:
+                <input type="number" name="toys" step="1" min="1"  value='{{gift.toys}}'/><br>
+              </label>
+              {% endif %}
+                {% if gift.books %}
+              <label>
+                Liczba 60l worków książek:
+                <input type="number" name="books" step="1" min="1"  value='{{gift.books}}'/><br>
+              </label>
+              {% endif %}
+                {% if gift.others %}
+              <label>
+                Liczba 60l worków innych darów:
+                <input type="number" name="others" step="1" min="1"  value='{{gift.others}}'/><br>
+              </label>
+              {% endif %}
             </div>
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
-              <button type="button" class="btn next-step">Dalej</button>
+              <button type="submit" class="btn next-step">Dalej</button>
             </div>
           </div>
 
