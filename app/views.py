@@ -160,6 +160,31 @@ class Donate1View(View):
 
 class Donate2View(View):
     def get(self, request):
-        if request.session['gift']:
-            return render(request, 'app/form2.html')
-        return redirect('donate1')
+        # if request.session['gift']:
+        #     g = Gift.objects.get(id=request.session['gift'])
+        g = Gift.objects.get(id=41)
+        print(g)
+
+        return render(request, 'app/form2.html', {'gift': g})
+
+    # return redirect('donate1')
+    def post(self, request):
+        g = Gift.objects.get(id=41)
+        if request.POST.get('clothes_to_use', False):
+            clothes_to_use = request.POST.get('clothes_to_use')
+            g.clothes_to_use = clothes_to_use
+        if request.POST.get('clothes_useless', False):
+            clothes_useless = request.POST.get('clothes_useless')
+            g.clothes_useless = clothes_useless
+        if request.POST.get('toys', False):
+            toys = request.POST.get('toys')
+            g.toys = toys
+        if request.POST.get('books', False):
+            books = request.POST.get('books')
+            g.books = books
+        if request.POST.get('others', False):
+            others = request.POST.get('others')
+            g.others = others
+        g.save()
+
+        return redirect('landing-page')
