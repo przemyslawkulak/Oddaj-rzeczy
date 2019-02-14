@@ -13,8 +13,12 @@ TYPE = (
 class Institution(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255, null=True)
     mission = models.TextField(null=True)
     type = models.IntegerField(choices=TYPE, default=1)
+
+    def __str__(self):
+        return f'{self.name} {self.address} {self.city} {self.mission} {self.type} '
 
 
 class Gift(models.Model):
@@ -32,3 +36,6 @@ class Gift(models.Model):
     phone = models.CharField(max_length=20, null=True)
     comments = models.TextField(null=True)
 
+    def __str__(self):
+        return f'{self.date} {self.given} {self.clothes_to_use} {self.clothes_useless} {self.toys} ' \
+            f'{self.books} {self.others}'

@@ -1,13 +1,14 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
 
 from app.forms import LoginForm
-from app.models import Gift
+from app.models import Gift, Institution
 
 
 class LandingPageView(LoginRequiredMixin, View):
@@ -160,16 +161,17 @@ class Donate1View(View):
 
 class Donate2View(View):
     def get(self, request):
-        # if request.session['gift']:
-        #     g = Gift.objects.get(id=request.session['gift'])
-        g = Gift.objects.get(id=41)
-        print(g)
+        if request.session['gift']:
+            g = Gift.objects.get(id=request.session['gift'])
+            # g = Gift.objects.get(id=41)
+            print(g)
 
-        return render(request, 'app/form2.html', {'gift': g})
+            return render(request, 'app/form2.html', {'gift': g})
 
-    # return redirect('donate1')
+        return redirect('donate1')
+
     def post(self, request):
-        g = Gift.objects.get(id=41)
+        g = Gift.objects.get(id=request.session['gift'])
         if request.POST.get('clothes_to_use', False):
             clothes_to_use = request.POST.get('clothes_to_use')
             g.clothes_to_use = clothes_to_use
@@ -187,4 +189,61 @@ class Donate2View(View):
             g.others = others
         g.save()
 
-        return redirect('landing-page')
+        return redirect('donate3')
+
+
+class Donate3View(View):
+    def get(self, request):
+        # if request.session['gift']:
+        #     g = Gift.objects.get(id=request.session['gift'])
+        return render(request, 'app/form3.html')
+
+    # return redirect('donate1')
+
+    def post(self, request):
+        children, mothers, homeless, disabled, old = Institution.objects.none(), Institution.objects.none(), \
+                                                     Institution.objects.none(), Institution.objects.none(), \
+                                                     Institution.objects.none()
+        if request.POST.get('children', False):
+            children = Institution.objects.filter(type=1)
+            print(children)
+        if request.POST.get('mothers', False):
+            mothers = Institution.objects.filter(type=2)
+            print(mothers)
+        if request.POST.get('homeless', False):
+            homeless = Institution.objects.filter(type=3)
+            print(homeless)
+        if request.POST.get('disabled', False):
+            disabled = Institution.objects.filter(type=4)
+            print(disabled)
+        if request.POST.get('old', False):
+            old = Institution.objects.filter(type=5)
+            print(old)
+        all_institution = Institution.objects.none()
+        print(all_institution)
+        all_institution = all_institution | children
+        all_institution = all_institution | mothers
+        all_institution = all_institution | homeless
+        all_institution = all_institution | disabled
+        all_institution = all_institution | old
+        print(all_institution)
+        if request.POST['localization'] == 0:
+            request.session['find'] = all_institution
+            return redirect('donate4')
+
+        else:
+            city = request.POST['localization']
+            all_institution = all_institution.filter(city=city)
+            print(city)
+            print(all_institution)
+
+            request.session['find'] = all_institution
+            return redirect('donate4')
+
+
+class Donate4View(View):
+    def get(self, request):
+        if request.session['find']:
+            pass
+        else:
+            return redirect('landing-page')
