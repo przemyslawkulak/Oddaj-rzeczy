@@ -194,11 +194,11 @@ class Donate2View(View):
 
 class Donate3View(View):
     def get(self, request):
-        # if request.session['gift']:
-        #     g = Gift.objects.get(id=request.session['gift'])
-        return render(request, 'app/form3.html')
+        if request.session['gift']:
+            g = Gift.objects.get(id=request.session['gift'])
+            return render(request, 'app/form3.html')
 
-    # return redirect('donate1')
+        return redirect('donate1')
 
     def post(self, request):
         children, mothers, homeless, disabled, old = Institution.objects.none(), Institution.objects.none(), \
@@ -228,7 +228,10 @@ class Donate3View(View):
         all_institution = all_institution | old
         print(all_institution)
         if request.POST['localization'] == 0:
-            request.session['find'] = all_institution
+            id_list = []
+            for i in all_institution:
+                id_list.append(i.pk)
+            request.session['find'] = id_list
             return redirect('donate4')
 
         else:
@@ -236,14 +239,26 @@ class Donate3View(View):
             all_institution = all_institution.filter(city=city)
             print(city)
             print(all_institution)
-
-            request.session['find'] = all_institution
+            id_list = []
+            for i in all_institution:
+                id_list.append(i.pk)
+            request.session['find'] = id_list
             return redirect('donate4')
 
 
 class Donate4View(View):
     def get(self, request):
         if request.session['find']:
-            pass
+            all_institution = Institution.objects.none()
+            for i in request.session['find']:
+                all_institution = all_institution | Institution.objects.filter(id=i)
+            return render(request, 'app/form4.html', {'all_institution': all_institution})
         else:
-            return redirect('landing-page')
+            all_institution = Institution.objects.none()
+            return render(request, 'app/form4.html', {'all_institution': all_institution})
+
+    def post(self, request):
+        i = request.POST.get('organization')
+        request.session['institution'] = i
+        print(i)
+        return redirect('landing-page')
