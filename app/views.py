@@ -262,3 +262,8 @@ class Donate4View(View):
         request.session['institution'] = i
         print(i)
         return redirect('landing-page')
+
+
+class Donate5View(View):
+    def get(self, request):
+        return render(request, 'app/form5.html')
