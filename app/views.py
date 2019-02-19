@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views import View
 
-from app.forms import LoginForm
+from app.forms import LoginForm, GiftForm
 from app.models import Gift, Institution
 
 
@@ -266,4 +266,10 @@ class Donate4View(View):
 
 class Donate5View(View):
     def get(self, request):
-        return render(request, 'app/form5.html')
+        form = GiftForm(request.POST)
+        return render(request, 'app/form5.html', {'form': form})
+
+    def post(self, request):
+        form = GiftForm(request.POST)
+        if form.is_valid():
+            pass

@@ -22,7 +22,8 @@ class Institution(models.Model):
 
 
 class Gift(models.Model):
-    date = models.DateTimeField(null=True)
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
     given = models.BooleanField(default=False)
     clothes_to_use = models.IntegerField(null=True)
     clothes_useless = models.IntegerField(null=True)
@@ -33,7 +34,7 @@ class Gift(models.Model):
     street = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     post_code = models.CharField(max_length=6, null=True)
-    phone = models.CharField(max_length=20, null=True)
+    phone = models.CharField(max_length=10, null=True)
     comments = models.TextField(null=True)
 
     def __str__(self):
