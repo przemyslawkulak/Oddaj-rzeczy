@@ -296,5 +296,7 @@ class Donate6View(View):
     def get(self, request):
         if request.session['gift']:
             g = Gift.objects.get(id=request.session['gift'])
-
             return render(request, "app/form6.html", {'gift': g})
+
+    def post(selfself, request):
+        return redirect('landing-page')

@@ -92,6 +92,7 @@
       <div class="form--steps-container">
 
         <form method="POST">
+            {% csrf_token %}
           <!-- STEP 6 -->
           <div data-step="6" class="active">
             <h3>Podsumowanie Twojej darowizny</h3>
@@ -100,17 +101,52 @@
               <div class="form-section">
                 <h4>Oddajesz:</h4>
                 <ul>
+                    {% if gift.clothes_to_use > 0%}
                   <li>
                     <span class="icon icon-bag"></span>
                     <span class="summary--text"
-                      >4 worki ubrań w dobrym stanie dla dzieci{{gift}}</span
-                    >
+                      >{{gift.clothes_to_use}} {% if gift.clothes_to_use == 1 %}worek {% elif gift.clothes_to_use < 5 %}worki {% else %}worków {%endif%}  ubrań w dobrym stanie </span>
                   </li>
+                    {% endif %}
+                     {% if gift.clothes_useless > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.clothes_useless}} {% if gift.clothes_useless == 1 %}worek {% elif gift.clothes_useless < 5 %}worki {% else %}worków {%endif%} ubrań do wyrzucenia </span>
+                  </li>
+                    {% endif %}
+                     {% if gift.toys > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.toys}} {% if gift.toys == 1 %}worek {% elif gift.toys < 5 %}worki {% else %}worków {%endif%} zabawek </span>
+                  </li>
+                    {% endif %}
+                     {% if gift.books > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.books}} {% if gift.books == 1 %}worek {% elif gift.books < 5 %}worki {% else %}worków {%endif%} książek </span>
+                  </li>
+                    {% endif %}
+                     {% if gift.others > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.others}} {% if gift.others == 1 %}worek {% elif gift.others < 5 %}worki {% else %}worków {%endif%} innych darów </span>
+                  </li>
+                    {% endif %}
 
                   <li>
                     <span class="icon icon-hand"></span>
                     <span class="summary--text"
-                      >Dla fundacji "Mam marzenie" w Warszawie</span
+                      ><div class="title">Dla instytucji: <br>{{gift.institution.name}}</div>
+                    <div class="subtitle">
+                     Adres: {{gift.institution.city}}, {{gift.institution.address}}
+                  </div>
+                  <div class="subtitle">
+                    Cel i misja: {{gift.institution.mission}}
+                  </div></span
                     >
                   </li>
                 </ul>
