@@ -260,9 +260,13 @@ class Donate4View(View):
     def post(self, request):
         i = request.POST.get('organization')
         request.session['institution'] = i
-        print(i)
+        if request.session['gift']:
+            g = Gift.objects.get(id=request.session['gift'])
+            g.institution = Institution.objects.get(id=i)
+            g.save()
+            print(i)
+            return redirect('donate5')
         return redirect('landing-page')
-
 
 class Donate5View(View):
     def get(self, request):
@@ -271,5 +275,17 @@ class Donate5View(View):
 
     def post(self, request):
         form = GiftForm(request.POST)
-        if form.is_valid():
-            pass
+        if request.session['gift']:
+            if form.is_valid():
+                g = Gift.objects.get(id=request.session['gift'])
+                g.street = form.cleaned_data['street']
+                g.city = form.cleaned_data['city']
+                g.post_code = form.cleaned_data['post_code']
+                g.phone = form.cleaned_data['phone']
+                g.date = form.cleaned_data['date']
+                g.time = form.cleaned_data['time']
+                g.comments = form.cleaned_data['comments']
+                g.save()
+
+            return redirect('landing-page')
+        return redirect('donate1')
