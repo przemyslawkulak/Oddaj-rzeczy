@@ -197,49 +197,62 @@ class Donate3View(View):
         return redirect('donate1')
 
     def post(self, request):
-        children, mothers, homeless, disabled, old = Institution.objects.none(), Institution.objects.none(), \
-                                                     Institution.objects.none(), Institution.objects.none(), \
-                                                     Institution.objects.none()
-        if request.POST.get('children', False):
-            children = Institution.objects.filter(type=1)
-            print(children)
-        if request.POST.get('mothers', False):
-            mothers = Institution.objects.filter(type=2)
-            print(mothers)
-        if request.POST.get('homeless', False):
-            homeless = Institution.objects.filter(type=3)
-            print(homeless)
-        if request.POST.get('disabled', False):
-            disabled = Institution.objects.filter(type=4)
-            print(disabled)
-        if request.POST.get('old', False):
-            old = Institution.objects.filter(type=5)
-            print(old)
-        all_institution = Institution.objects.none()
-        print(all_institution)
-        all_institution = all_institution | children
-        all_institution = all_institution | mothers
-        all_institution = all_institution | homeless
-        all_institution = all_institution | disabled
-        all_institution = all_institution | old
-        print(all_institution)
-        if request.POST['localization'] == 0:
-            id_list = []
-            for i in all_institution:
-                id_list.append(i.pk)
-            request.session['find'] = id_list
-            return redirect('donate4')
+        if request.POST.get('organization_search', False):
+            all_institution = Institution.objects.filter(name__icontains=request.POST.get('organization_search'))
+            print(request.POST['localization'])
 
+            if request.POST['localization'] == '0':
+                id_list = []
+                print(all_institution)
+                for i in all_institution:
+                    id_list.append(i.pk)
+                print(id_list)
+                request.session['find'] = id_list
+                return redirect('donate4')
+            else:
+                city = request.POST['localization']
+                print(all_institution)
+                all_institution = all_institution.filter(city=city)
+                id_list = []
+                for i in all_institution:
+                    id_list.append(i.pk)
+                request.session['find'] = id_list
+                return redirect('donate4')
         else:
-            city = request.POST['localization']
-            all_institution = all_institution.filter(city=city)
-            print(city)
-            print(all_institution)
-            id_list = []
-            for i in all_institution:
-                id_list.append(i.pk)
-            request.session['find'] = id_list
-            return redirect('donate4')
+            children, mothers, homeless, disabled, old = Institution.objects.none(), Institution.objects.none(), \
+                                                         Institution.objects.none(), Institution.objects.none(), \
+                                                         Institution.objects.none()
+            if request.POST.get('children', False):
+                children = Institution.objects.filter(type=1)
+            if request.POST.get('mothers', False):
+                mothers = Institution.objects.filter(type=2)
+            if request.POST.get('homeless', False):
+                homeless = Institution.objects.filter(type=3)
+            if request.POST.get('disabled', False):
+                disabled = Institution.objects.filter(type=4)
+            if request.POST.get('old', False):
+                old = Institution.objects.filter(type=5)
+            all_institution = Institution.objects.none()
+            all_institution = all_institution | children
+            all_institution = all_institution | mothers
+            all_institution = all_institution | homeless
+            all_institution = all_institution | disabled
+            all_institution = all_institution | old
+            if request.POST['localization'] == '0':
+                id_list = []
+                for i in all_institution:
+                    id_list.append(i.pk)
+                request.session['find'] = id_list
+                return redirect('donate4')
+
+            else:
+                city = request.POST['localization']
+                all_institution = all_institution.filter(city=city)
+                id_list = []
+                for i in all_institution:
+                    id_list.append(i.pk)
+                request.session['find'] = id_list
+                return redirect('donate4')
 
 
 class Donate4View(View):
