@@ -873,6 +873,14 @@ header.header--form-page {
   height: 100vh;
 }
 
+header.header--form-page1 {
+  background-image: url(../images/header-form-bg.jpg);
+  background-position: top left -500px;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  height: 50vh;
+}
+
 /* line 23, scss/modules/_header.scss */
 header .slogan {
   height: calc(100% - 141px);

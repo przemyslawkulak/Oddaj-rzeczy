@@ -161,11 +161,8 @@ class Donate1View(View):
 
 class Donate2View(View):
     def get(self, request):
-        if request.session['gift']:
+        if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
-            # g = Gift.objects.get(id=41)
-            print(g)
-
             return render(request, 'app/form2.html', {'gift': g})
 
         return redirect('donate1')
@@ -194,10 +191,9 @@ class Donate2View(View):
 
 class Donate3View(View):
     def get(self, request):
-        if request.session['gift']:
+        if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
             return render(request, 'app/form3.html')
-
         return redirect('donate1')
 
     def post(self, request):
@@ -260,13 +256,13 @@ class Donate4View(View):
     def post(self, request):
         i = request.POST.get('organization')
         request.session['institution'] = i
-        if request.session['gift']:
+        if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
             g.institution = Institution.objects.get(id=i)
             g.save()
             print(i)
             return redirect('donate5')
-        return redirect('landing-page')
+        return redirect('donate1')
 
 
 class Donate5View(View):
@@ -276,7 +272,7 @@ class Donate5View(View):
 
     def post(self, request):
         form = GiftForm(request.POST)
-        if request.session['gift']:
+        if 'gift' in request.session:
             if form.is_valid():
                 g = Gift.objects.get(id=request.session['gift'])
                 g.street = form.cleaned_data['street']
@@ -294,9 +290,21 @@ class Donate5View(View):
 
 class Donate6View(View):
     def get(self, request):
-        if request.session['gift']:
+        if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
             return render(request, "app/form6.html", {'gift': g})
+        return redirect('donate1')
 
-    def post(selfself, request):
-        return redirect('landing-page')
+    def post(self, request):
+        return redirect('donate7')
+
+
+class Donate7View(View):
+    def get(self, request):
+        if 'gift' in request.session:
+            del request.session['gift']
+        if 'institution' in request.session:
+            del request.session['institution']
+        if 'find' in request.session:
+            del request.session['find']
+        return render(request, 'app/form7.html')
