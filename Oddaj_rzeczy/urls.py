@@ -33,4 +33,5 @@ urlpatterns = [
     path('donate5/', Donate5View.as_view(), name='donate5'),
     path('donate6/', Donate6View.as_view(), name='donate6'),
 
+
 ]

@@ -288,7 +288,7 @@ class Donate5View(View):
                 g.comments = form.cleaned_data['comments']
                 g.save()
 
-            return redirect('landing-page')
+            return redirect('donate6')
         return redirect('donate1')
 
 
