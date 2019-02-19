@@ -268,6 +268,7 @@ class Donate4View(View):
             return redirect('donate5')
         return redirect('landing-page')
 
+
 class Donate5View(View):
     def get(self, request):
         form = GiftForm(request.POST)
@@ -289,3 +290,11 @@ class Donate5View(View):
 
             return redirect('landing-page')
         return redirect('donate1')
+
+
+class Donate6View(View):
+    def get(self, request):
+        if request.session['gift']:
+            g = Gift.objects.get(id=request.session['gift'])
+
+            return render(request, "app/form6.html", {'gift': g})
