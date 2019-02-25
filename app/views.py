@@ -2,9 +2,11 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
 from django.views import View
 
 from app.forms import LoginForm, GiftForm
@@ -156,7 +158,8 @@ class Donate1View(View):
         g = Gift.objects.create(clothes_to_use=clothes_to_use, clothes_useless=clothes_useless,
                                 toys=toys, books=books, others=others)
         request.session['gift'] = g.id
-        return redirect('donate2')
+        return redirect('/donate2' + '#show')
+        # return reverse('donate2', anchor='show')
 
 
 class Donate2View(View):
@@ -186,7 +189,7 @@ class Donate2View(View):
             g.others = others
         g.save()
 
-        return redirect('donate3')
+        return redirect('/donate3' + '#show')
 
 
 class Donate3View(View):
@@ -243,7 +246,7 @@ class Donate3View(View):
                 for i in all_institution:
                     id_list.append(i.pk)
                 request.session['find'] = id_list
-                return redirect('donate4')
+                return redirect('/donate4' + '#show')
 
             else:
                 city = request.POST['localization']
@@ -252,7 +255,7 @@ class Donate3View(View):
                 for i in all_institution:
                     id_list.append(i.pk)
                 request.session['find'] = id_list
-                return redirect('donate4')
+                return redirect('/donate4' + '#show')
 
 
 class Donate4View(View):
@@ -274,7 +277,7 @@ class Donate4View(View):
             g.institution = Institution.objects.get(id=i)
             g.save()
             print(i)
-            return redirect('donate5')
+            return redirect('/donate5' + '#show')
         return redirect('donate1')
 
 
@@ -297,7 +300,7 @@ class Donate5View(View):
                 g.comments = form.cleaned_data['comments']
                 g.save()
 
-            return redirect('donate6')
+            return redirect('/donate6' + '#show')
         return redirect('donate1')
 
 
@@ -309,7 +312,7 @@ class Donate6View(View):
         return redirect('donate1')
 
     def post(self, request):
-        return redirect('donate7')
+        return redirect('/donate7' + '#show')
 
 
 class Donate7View(View):
