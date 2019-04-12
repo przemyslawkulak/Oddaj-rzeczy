@@ -13,14 +13,18 @@
     <header>
       <nav class="container container--70">
         <ul class="nav--actions">
+           {% if user %}
           <li><a href="{% url 'profile' %}" class="highlighted">Witaj {{user.username}} </a></li>
            <li><a href="{% url 'logout' %}" class="highlighted"> Wyloguj</a></li>
+           {% else %}
+          <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+          {% endif %}
           <li class="highlighted"><a href="{% url 'register' %}">Załóż konto</a></li>
         </ul>
 
         <ul>
           <li><a href="{% url 'landing-page' %}">Start</a></li>
-          <li><a href="#">O co chodzi?</a></li>
+          <li><a href="{% url 'landing-page' %}#help">O co chodzi?</a></li>
           <li><a href="#">O nas</a></li>
           <li><a href="#">Fundacje i organizacje</a></li>
           <li><a href="#">Kontakt</a></li>
@@ -34,16 +38,16 @@
         {% csrf_token %}
         <h3>{{text}}</h3>
         <div class="form-group"><label>Imię:<br>
-          <input type="name" name="name" value={{user.first_name}} placeholder="Name" /></label>
+          <input type="text" name="name" value='{{user.first_name}}' placeholder="Name" /></label>
         </div>
         <div class="form-group">Nazwisko:<br>
-          <input type="surname" name="surname" value={{user.last_name}} placeholder="Surname" />
+          <input type="text" name="surname" value='{{user.last_name}}' placeholder="Surname" />
         </div>
         <div class="form-group">Email:<br>
-          <input type="email" name="email" value={{user.email}} placeholder="Email" />
+          <input type="email" name="email" value='{{user.email}}' placeholder="Email" />
         </div>
         <div class="form-group">Login:<br>
-          <input type="login" name="login" value={{user.username}} placeholder="Login" />
+          <input type="text" name="login" value='{{user.username}}' placeholder="Login" />
         </div>
 
         <div class="form-group form-group--buttons">

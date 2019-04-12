@@ -90,7 +90,7 @@ class RegisterView(View):
         return render(request, 'app/register.html', {"text": text})
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'app/profile.html')
 
@@ -138,7 +138,7 @@ class ProfileView(View):
         return render(request, 'app/profile.html', {"text": text})
 
 
-class Donate1View(View):
+class Donate1View(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'app/form1.html')
 
@@ -162,7 +162,7 @@ class Donate1View(View):
         # return reverse('donate2', anchor='show')
 
 
-class Donate2View(View):
+class Donate2View(LoginRequiredMixin, View):
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -192,7 +192,7 @@ class Donate2View(View):
         return redirect('/donate3' + '#show')
 
 
-class Donate3View(View):
+class Donate3View(LoginRequiredMixin, View):
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -258,7 +258,7 @@ class Donate3View(View):
                 return redirect('/donate4' + '#show')
 
 
-class Donate4View(View):
+class Donate4View(LoginRequiredMixin, View):
     def get(self, request):
         if request.session['find']:
             all_institution = Institution.objects.none()
@@ -281,7 +281,7 @@ class Donate4View(View):
         return redirect('donate1')
 
 
-class Donate5View(View):
+class Donate5View(LoginRequiredMixin, View):
     def get(self, request):
         form = GiftForm(request.POST)
         return render(request, 'app/form5.html', {'form': form})
@@ -304,7 +304,7 @@ class Donate5View(View):
         return redirect('donate1')
 
 
-class Donate6View(View):
+class Donate6View(LoginRequiredMixin, View):
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -315,7 +315,7 @@ class Donate6View(View):
         return redirect('/donate7' + '#show')
 
 
-class Donate7View(View):
+class Donate7View(LoginRequiredMixin, View):
     def get(self, request):
         if 'gift' in request.session:
             del request.session['gift']
