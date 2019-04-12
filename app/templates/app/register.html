@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <header class="header--main-page">
+    <header>
       <nav class="container container--70">
         <ul class="nav--actions">
-         {% if user %}
+         {% if auth %}
             <li><a href="{% url 'profile' %}" class="btn btn--small btn--without-border">Witaj {{user.username}} </a></li>
           <li><a href="{% url 'logout' %}" class="btn btn--small btn--without-border"> Wyloguj</a></li>
           {% else %}
@@ -22,11 +22,11 @@
         </ul>
 
         <ul>
-          <li><a href="#">Start</a></li>
-          <li><a href="#">O co chodzi?</a></li>
-          <li><a href="#">O nas</a></li>
-          <li><a href="#">Fundacje i organizacje</a></li>
-          <li><a href="#">Kontakt</a></li>
+          <li><a href="#" class="btn btn--without-border active">Start</a></li>
+          <li><a href="{% url 'landing-page' %}#help" class="btn btn--without-border ">O co chodzi?</a></li>
+          <li><a href="#" class="btn btn--without-border ">O nas</a></li>
+          <li><a href="#" class="btn btn--without-border ">Fundacje i organizacje</a></li>
+          <li><a href="#" class="btn btn--without-border ">Kontakt</a></li>
         </ul>
       </nav>
     </header>
