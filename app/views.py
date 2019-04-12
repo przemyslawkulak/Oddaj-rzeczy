@@ -1,12 +1,10 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import QuerySet
-from django.http import HttpResponseRedirect
+
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.urls import reverse
 from django.views import View
 
 from app.forms import LoginForm, GiftForm
@@ -16,11 +14,6 @@ from app.models import Gift, Institution
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'app/index.html')
-
-
-# class LandingPageView(View):
-#     def get(self, request):
-#         return render(request, 'index.html')
 
 
 class LoginView(View):
