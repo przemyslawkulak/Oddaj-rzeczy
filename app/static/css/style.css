@@ -1529,7 +1529,20 @@ header nav ul li:last-of-type {
 .help--slides-pagination li {
   margin: 0 8px;
 }
+.help--slides-paginations {
+  margin-top: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
 
+/* line 101, scss/modules/homepage-sections/_help.scss */
+.help--slides-paginations li {
+  margin: 0 8px;
+}
 /* line 1, scss/modules/_footer.scss */
 footer {
   min-height: 80vh;

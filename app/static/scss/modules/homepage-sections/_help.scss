@@ -102,5 +102,14 @@
         margin: 0 8px;
       }
     }
+    &-paginations {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+
+      li {
+        margin: 0 8px;
+      }
+    }
   }
 }
