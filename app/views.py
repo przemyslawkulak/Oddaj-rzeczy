@@ -131,7 +131,7 @@ class RegisterView(View):
 class ProfileView(LoginRequiredMixin, View):
     """
     Update user's details and passwords
-    check unique username, email,
+    check unique username, email
     """
 
     def get(self, request):
@@ -187,12 +187,18 @@ class ProfileView(LoginRequiredMixin, View):
 
 
 class ProfileUpdateView(LoginRequiredMixin, View):
+    """
+    view to update user's details
+    """
     def get(self, request):
         text = 'Udana edycja danych'
         return redirect('profile')
 
 
 class Donate1View(LoginRequiredMixin, View):
+    """
+    View with choosing type of given donations
+    """
     def get(self, request):
         return render(request, 'app/form1.html')
 
@@ -213,15 +219,16 @@ class Donate1View(LoginRequiredMixin, View):
                                 toys=toys, books=books, others=others)
         request.session['gift'] = g.id
         return redirect('/donate2' + '#show')
-        # return reverse('donate2', anchor='show')
 
 
 class Donate2View(LoginRequiredMixin, View):
+    """
+    View to define amount of donation
+    """
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
             return render(request, 'app/form2.html', {'gift': g})
-
         return redirect('donate1')
 
     def post(self, request):
@@ -248,9 +255,11 @@ class Donate2View(LoginRequiredMixin, View):
 
 
 class Donate3View(LoginRequiredMixin, View):
+    """
+    View to select proper kind of institution, with searching engine
+    """
     def get(self, request):
         if 'gift' in request.session:
-            g = Gift.objects.get(id=request.session['gift'])
             return render(request, 'app/form3.html')
         return redirect('donate1')
 
@@ -314,6 +323,9 @@ class Donate3View(LoginRequiredMixin, View):
 
 
 class Donate4View(LoginRequiredMixin, View):
+    """
+    View to select one institution from list of chosen on previous view
+    """
     def get(self, request):
         if request.session['find']:
             all_institution = Institution.objects.none()
@@ -341,6 +353,9 @@ class Donate4View(LoginRequiredMixin, View):
 
 
 class Donate5View(LoginRequiredMixin, View):
+    """
+    View to insert delivery pick up details
+    """
     def get(self, request):
         form = GiftForm(request.POST)
         return render(request, 'app/form5.html', {'form': form})
@@ -364,6 +379,9 @@ class Donate5View(LoginRequiredMixin, View):
 
 
 class Donate6View(LoginRequiredMixin, View):
+    """
+    View with donate details
+    """
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -376,6 +394,9 @@ class Donate6View(LoginRequiredMixin, View):
 
 
 class Donate7View(LoginRequiredMixin, View):
+    """
+    View with thanks, deleting session variable
+    """
     def get(self, request):
         if 'gift' in request.session:
             del request.session['gift']
@@ -390,6 +411,9 @@ class Donate7View(LoginRequiredMixin, View):
 
 
 class AddOrganizationView(LoginRequiredMixin, View):
+    """
+    View with form to add new institution
+    """
     def get(self, request):
         form = OrganizationForm()
         return render(request, 'app/add_organization.html', {'form': form})
@@ -403,7 +427,14 @@ class AddOrganizationView(LoginRequiredMixin, View):
             city = form.cleaned_data['city']
             mission = form.cleaned_data['mission']
             type = form.cleaned_data['type']
-            Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
+            institution = Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
+            send_mail(
+                    'Instytucja do zatwierdzenia',
+                    "Instytucja " + institution.name + " właśnie została utworzona. Proszę o zatwierdzenie",
+                    'racemate.app@gmail.com',
+                    ['przemyslaw.kulak86@gmail.com'],
+                    fail_silently=False,
+                )
             return redirect('landing-page')
         text = "Uzupełnij wszystkie dane"
         return render(request, 'app/add_organization.html', {'text': text})
