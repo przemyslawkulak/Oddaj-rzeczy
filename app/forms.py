@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import TextInput
 
 from app.models import Gift, Institution
@@ -10,6 +11,7 @@ TYPE = (
     (4, "starsi ludzie"),
     (5, "niepoełnosprawn")
 )
+
 
 class LoginForm(forms.Form):
     login = forms.CharField()
@@ -43,6 +45,7 @@ class ContactForm(forms.Form):
 
 class OrganizationForm(forms.ModelForm):
     type = forms.ChoiceField(choices=TYPE)
+
     class Meta:
         model = Institution
         exclude = ('approved',)

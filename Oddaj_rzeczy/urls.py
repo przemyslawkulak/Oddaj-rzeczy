@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from app.views import LandingPageView, LoginView, LogoutView, RegisterView, ProfileView, Donate1View, Donate2View, \
-    Donate3View, Donate4View, Donate5View, Donate6View, Donate7View, AddOrganizationView
+    Donate3View, Donate4View, Donate5View, Donate6View, Donate7View, AddOrganizationView, ProfileUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('profileupdate/', ProfileUpdateView.as_view(), name='profile_update'),
     path('donate/', Donate1View.as_view(), name='donate1'),
     path('donate2/', Donate2View.as_view(), name='donate2'),
     path('donate3/', Donate3View.as_view(), name='donate3'),

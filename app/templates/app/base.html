@@ -13,7 +13,8 @@
       <nav class="container container--70">
         <ul class="nav--actions">
           {% if auth %}
-            <li><a href="{% url 'profile' %}" class="btn btn--small btn--without-border">Witaj {{user.username}} </a></li>
+          <li><a href="#" class="btn btn--small btn--without-border">Witaj {{user.username}} </a></li>
+          <li><a href="{% url 'profile' %}" class="btn btn--small btn--without-border">Edytuj dane</a></li>
           <li><a href="{% url 'logout' %}" class="btn btn--small btn--without-border"> Wyloguj</a></li>
           {% else %}
           <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>

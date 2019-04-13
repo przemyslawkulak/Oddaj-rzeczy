@@ -14,6 +14,11 @@ from app.models import Gift, Institution
 
 
 def send_email(request):
+    """
+    function to sending email in contact forms
+    :param request:
+    :return: redirect to landing-page
+    """
     form = ContactForm(request.POST)
     if form.is_valid():
         name = form.cleaned_data['name']
@@ -32,6 +37,10 @@ def send_email(request):
 
 
 class LandingPageView(LoginRequiredMixin, View):
+    """
+    Landing View with links to Donate Form, Adding Institution, Contact Form
+    """
+
     def get(self, request):
         all_institutions = Institution.objects.all().filter(approved=True).order_by('?')
         p = Paginator(all_institutions, 5)
@@ -46,16 +55,14 @@ class LandingPageView(LoginRequiredMixin, View):
 
 
 class LoginView(View):
+    """
+    login view - if succesful redirect to landing page
+    """
+
     def get(self, request):
-        form = LoginForm()
         return render(request, 'app/login.html')
 
     def post(self, request):
-        '''
-
-        :param request:
-        :return:
-        '''
         form = LoginForm(request.POST)
         if form.is_valid():
             user = authenticate(username=form['login'].value(),
@@ -71,12 +78,21 @@ class LoginView(View):
 
 
 class LogoutView(View):
+    """
+    logout view - if  if succesful redirect to login page
+    """
+
     def get(self, request):
         logout(request)  # wylogowanie
         return redirect('login')
 
 
 class RegisterView(View):
+    """
+    register view to creating user - if succesful redirect to login page
+    check unique of username and email,
+    """
+
     def get(self, request):
         return render(request, 'app/register.html')
 
@@ -86,14 +102,14 @@ class RegisterView(View):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         password = request.POST.get('password')
-        confirmPassword = request.POST.get('password2')
+        confirm_password = request.POST.get('password2')
         users = User.objects.all()
         usernames = []
         emails = []
         for i in users:
             emails.append(i.email)
             usernames.append(i.username)
-        if username and email and name and surname and password and confirmPassword and password == confirmPassword:
+        if username and email and name and surname and password and confirm_password and password == confirm_password:
             if username in usernames:
                 text = 'Podany user już istnieje'
                 return render(request, 'app/register.html', {"text": text})
@@ -113,6 +129,11 @@ class RegisterView(View):
 
 
 class ProfileView(LoginRequiredMixin, View):
+    """
+    Update user's details and passwords
+    check unique username, email,
+    """
+
     def get(self, request):
         return render(request, 'app/profile.html')
 
@@ -123,7 +144,7 @@ class ProfileView(LoginRequiredMixin, View):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         password = request.POST.get('password')
-        confirmPassword = request.POST.get('password2')
+        confirm_password = request.POST.get('password2')
         u = User.objects.get(username=request.user)
         users = User.objects.all()
         usernames = []
@@ -145,11 +166,10 @@ class ProfileView(LoginRequiredMixin, View):
                 u.first_name = name
                 u.last_name = surname
                 u.save()
-                text = 'Udana edycja danych'
-                return render(request, 'app/profile.html', {"text": text})
+                return redirect('profile_update')
 
-        if password or confirmPassword:
-            if password and confirmPassword and password == confirmPassword:
+        if password or confirm_password:
+            if password and confirm_password and password == confirm_password:
                 if u.check_password(request.POST['pastpassword']):  # sprawdza stare hasło
                     u.set_password(password)  # zmienia hasło na nowe
                     update_session_auth_hash(request, u)  # nie wylogowuje po aktualizacji hasła
@@ -166,13 +186,18 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'app/profile.html', {"text": text})
 
 
+class ProfileUpdateView(LoginRequiredMixin, View):
+    def get(self, request):
+        text = 'Udana edycja danych'
+        return redirect('profile')
+
+
 class Donate1View(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'app/form1.html')
 
     def post(self, request):
         send_email(request)
-        l = request.POST.getlist('products')
         clothes_to_use, clothes_useless, toys, books, others = 0, 0, 0, 0, 0
         if request.POST.get('products1', False):
             clothes_to_use = 1
