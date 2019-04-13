@@ -148,16 +148,21 @@ class ProfileView(LoginRequiredMixin, View):
                 text = 'Udana edycja danych'
                 return render(request, 'app/profile.html', {"text": text})
 
-        if password and confirmPassword and password == confirmPassword:
-            if u.check_password(request.POST['pastpassword']):  # sprawdza stare hasło
-                u.set_password(password)  # zmienia hasło na nowe
-                update_session_auth_hash(request, u)  # nie wylogowuje po aktualizacji hasła
-                u.save()
-                text = 'Udana aktualizacja hasła'
+        if password or confirmPassword:
+            if password and confirmPassword and password == confirmPassword:
+                if u.check_password(request.POST['pastpassword']):  # sprawdza stare hasło
+                    u.set_password(password)  # zmienia hasło na nowe
+                    update_session_auth_hash(request, u)  # nie wylogowuje po aktualizacji hasła
+                    u.save()
+                    text = 'Udana aktualizacja hasła'
+                    return render(request, 'app/profile.html', {"text": text})
+                text = 'Nieprawidłowe stare hasło'
                 return render(request, 'app/profile.html', {"text": text})
-            text = 'Nieprawidłowe stare hasło'
-            return render(request, 'app/profile.html', {"text": text})
-        text = 'Żle powtórzone hasło'
+            else:
+                text = 'Żle powtórzone hasło'
+                return render(request, 'app/profile.html', {"text": text})
+
+        text = 'Uzupełnij dane'
         return render(request, 'app/profile.html', {"text": text})
 
 
