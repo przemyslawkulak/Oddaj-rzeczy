@@ -33,7 +33,7 @@ def send_email(request):
 
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request):
-        all_institutions = Institution.objects.all().order_by('?')
+        all_institutions = Institution.objects.all().filter(approved=True).order_by('?')
         p = Paginator(all_institutions, 5)
         page = request.GET.get('page')
         all_institutions_paginator = p.get_page(page)
@@ -375,4 +375,5 @@ class AddOrganizationView(LoginRequiredMixin, View):
             type = form.cleaned_data['type']
             Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
             return redirect('landing-page')
-        return redirect('landing-page')
+        text = "Uzupełnij wszystkie dane"
+        return render(request, 'app/add_organization.html', {'text': text})

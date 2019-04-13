@@ -3,6 +3,13 @@ from django.forms import TextInput
 
 from app.models import Gift, Institution
 
+TYPE = (
+    (1, "dzieci"),
+    (2, "samotne matki"),
+    (3, "bezdomni"),
+    (4, "starsi ludzie"),
+    (5, "niepoełnosprawn")
+)
 
 class LoginForm(forms.Form):
     login = forms.CharField()
@@ -35,12 +42,14 @@ class ContactForm(forms.Form):
 
 
 class OrganizationForm(forms.ModelForm):
+    type = forms.ChoiceField(choices=TYPE)
     class Meta:
         model = Institution
         exclude = ('approved',)
         widgets = {
-            'name': TextInput(attrs={'type': "text", 'name': "name", 'placeholder': 'Name'}),
-            'address': TextInput(attrs={'type': "text", 'name': "address", 'placeholder': 'address'}),
-            'city': TextInput(attrs={'type': "text", 'name': "city", 'placeholder': 'city'}),
-            'mission': forms.Textarea(attrs={'placeholder': 'Mission'}),
+            'name': TextInput(attrs={'type': "text", 'name': "name", 'placeholder': 'Nazwa instytucji'}),
+            'address': TextInput(attrs={'type': "text", 'name': "address", 'placeholder': 'Adres'}),
+            'city': TextInput(attrs={'type': "text", 'name': "city", 'placeholder': 'Miasto'}),
+            'mission': forms.Textarea(attrs={'placeholder': 'Cel i misja instytucji', 'rows': "4"}),
+            'type': forms.Select(choices=TYPE)
         }

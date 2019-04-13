@@ -115,7 +115,8 @@
               </label>
             </div>
               {% empty %}
-              <h3>Brak organizacji</h3>
+            <li><a href="{% url 'add-organization'%}" class="btn btn">Nie mamy w bazie instytucji, którą chcesz wspomóc? Zgłoś ją do nas!</a></li>
+
                 {% endfor %}
 
 

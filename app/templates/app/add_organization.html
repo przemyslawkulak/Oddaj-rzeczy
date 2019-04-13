@@ -2,32 +2,32 @@
 {% block content %}
 <div class="slogan container container--90" id="help">
 <section class="login-page">
-      <h2>Zgłoś do nas swoją organizację</h2>
+      <h2>Zgłoś do nas instytucję</h2>
       <form method="POST">
         {% csrf_token %}
-        <div class="form-group">
-          <h2>{{text}}</h2>
-        </div>
+
 
         <div class="form-group">
-          <input type="name" name="name" placeholder="Name" />
+          {{form.name}}
         </div>
         <div class="form-group">
-          <input type="address" name="address" placeholder="Address" />
+         {{form.address}}
         </div>
         <div class="form-group">
-          <input type="city" name="city" placeholder="City" />
+          {{form.city}}
         </div>
         <div class="form-group">
-          <input type="mission" name="mission" placeholder="Mission" />
+          {{form.mission}}
         </div>
         <div class="form-group">
         {{form.type}}
         </div>
 
-        <div class="form-group form-group--buttons">
+        <div class="form-group">
           <button class="btn" type="submit">Wyślij prośbe do wpisanie do bazy</button>
-            <a href="login.html" class="btn btn--without-border"></a>
+        </div>
+          <div class="form-group">
+          <h2>{{text}}</h2>
         </div>
       </form>
     </section>
