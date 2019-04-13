@@ -157,4 +157,10 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
-
+.idea/Oddaj-rzeczy.iml
+.idea/dataSources.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/snapshots/
+.idea/vcs.xml

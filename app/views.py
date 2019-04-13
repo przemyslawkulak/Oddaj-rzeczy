@@ -13,6 +13,24 @@ from app.forms import LoginForm, GiftForm, ContactForm, OrganizationForm
 from app.models import Gift, Institution
 
 
+def send_email(request):
+    form = ContactForm(request.POST)
+    if form.is_valid():
+        name = form.cleaned_data['name']
+        surname = form.cleaned_data['surname']
+        content = form.cleaned_data['content']
+
+        send_mail(
+            ('Oddaj rzeczy ' + name + ' ' + surname),
+            content,
+            'racemate.app@gmail.com',
+            ['przemyslaw.kulak86@gmail.com'],
+            fail_silently=False,
+        )
+        return redirect('landing-page')
+    return redirect('landing-page')
+
+
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request):
         all_institutions = Institution.objects.all().order_by('?')
@@ -23,20 +41,7 @@ class LandingPageView(LoginRequiredMixin, View):
         return render(request, 'app/index.html', {'all_institutions': all_institutions_paginator})
 
     def post(self, request):
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            surname = form.cleaned_data['surname']
-            content = form.cleaned_data['content']
-
-            send_mail(
-                ('Oddaj rzeczy ' + name + ' ' + surname),
-                content,
-                'racemate.app@gmail.com',
-                ['przemyslaw.kulak86@gmail.com'],
-                fail_silently=False,
-            )
-            return redirect('landing-page')
+        send_email(request)
         return redirect('landing-page')
 
 
@@ -112,6 +117,7 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'app/profile.html')
 
     def post(self, request):
+        send_email(request)
         username = request.POST.get("login")
         email = request.POST.get('email')
         name = request.POST.get('name')
@@ -160,6 +166,7 @@ class Donate1View(LoginRequiredMixin, View):
         return render(request, 'app/form1.html')
 
     def post(self, request):
+        send_email(request)
         l = request.POST.getlist('products')
         clothes_to_use, clothes_useless, toys, books, others = 0, 0, 0, 0, 0
         if request.POST.get('products1', False):
@@ -188,6 +195,7 @@ class Donate2View(LoginRequiredMixin, View):
         return redirect('donate1')
 
     def post(self, request):
+        send_email(request)
         g = Gift.objects.get(id=request.session['gift'])
         if request.POST.get('clothes_to_use', False):
             clothes_to_use = request.POST.get('clothes_to_use')
@@ -217,10 +225,11 @@ class Donate3View(LoginRequiredMixin, View):
         return redirect('donate1')
 
     def post(self, request):
+
+        send_email(request)
         if request.POST.get('organization_search', False):
             all_institution = Institution.objects.filter(
                 name__icontains=request.POST.get('organization_search')).filter(approved=True)
-
 
             if request.POST['localization'] == '0':
                 id_list = []
@@ -286,14 +295,19 @@ class Donate4View(LoginRequiredMixin, View):
             return render(request, 'app/form4.html', {'all_institution': all_institution})
 
     def post(self, request):
+        send_email(request)
         i = request.POST.get('organization')
         request.session['institution'] = i
         if 'gift' in request.session:
-            g = Gift.objects.get(id=request.session['gift'])
-            g.institution = Institution.objects.get(id=i).filter(approved=True)
-            g.save()
-            return redirect('/donate5' + '#show')
-        return redirect('donate1')
+            if i:
+
+                g = Gift.objects.get(id=request.session['gift'])
+                g.institution = Institution.objects.get(id=i)
+                g.save()
+                return redirect('/donate5' + '#show')
+            else:
+                return redirect('/donate4' + '#show')
+        return redirect('/donate1' + '#show')
 
 
 class Donate5View(LoginRequiredMixin, View):
@@ -327,6 +341,7 @@ class Donate6View(LoginRequiredMixin, View):
         return redirect('donate1')
 
     def post(self, request):
+        send_email(request)
         return redirect('/donate7' + '#show')
 
 
@@ -340,6 +355,9 @@ class Donate7View(LoginRequiredMixin, View):
             del request.session['find']
         return render(request, 'app/form7.html')
 
+    def post(self, request):
+        send_email(request)
+
 
 class AddOrganizationView(LoginRequiredMixin, View):
     def get(self, request):
@@ -347,6 +365,7 @@ class AddOrganizationView(LoginRequiredMixin, View):
         return render(request, 'app/add_organization.html', {'form': form})
 
     def post(self, request):
+        send_email(request)
         form = OrganizationForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -356,3 +375,4 @@ class AddOrganizationView(LoginRequiredMixin, View):
             type = form.cleaned_data['type']
             Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
             return redirect('landing-page')
+        return redirect('landing-page')
