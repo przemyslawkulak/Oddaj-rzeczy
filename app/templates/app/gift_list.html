@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <header class="header--main-page">
+    <header >
       <nav class="container container--70">
         <ul class="nav--actions">
           {% if auth %}
@@ -39,8 +39,60 @@
         </ul>
       </nav>
 
-        {% block content %}
-        {% endblock %}
+       <section class="help" id="organizations">
+      <h2>Lista Twoich darowizn</h2>
+
+      <div class="help--slides active" data-id="1">
+        <ul class="help--slides-items">
+          {% for gift in all_gift %}
+          <li>
+            <div class="col">
+              <div class="title">{{gift.institution.name}}</div>
+              <div class="subtitle">Data zgłoszenia: {{gift.date}}</div>
+            </div>
+
+            <div class="col"><div class="text"><ul>
+                    {% if gift.clothes_to_use > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                      {{gift.clothes_to_use}} {% if gift.clothes_to_use == 1 %}worek {% elif gift.clothes_to_use < 5 %}worki {% else %}worków {%endif%}  ubrań w dobrym stanie
+                  </li>
+                    {% endif %}
+                     {% if gift.clothes_useless > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                      {{gift.clothes_useless}} {% if gift.clothes_useless == 1 %}worek {% elif gift.clothes_useless < 5 %}worki {% else %}worków {%endif%} ubrań do wyrzucenia
+                  </li>
+                    {% endif %}
+                     {% if gift.toys > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.toys}} {% if gift.toys == 1 %}worek {% elif gift.toys < 5 %}worki {% else %}worków {%endif%} zabawek </span>
+                  </li>
+                    {% endif %}
+                     {% if gift.books > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.books}} {% if gift.books == 1 %}worek {% elif gift.books < 5 %}worki {% else %}worków {%endif%} książek </span>
+                  </li>
+                    {% endif %}
+                     {% if gift.others > 0%}
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text"
+                      >{{gift.others}} {% if gift.others == 1 %}worek {% elif gift.others < 5 %}worki {% else %}worków {%endif%} innych darów </span>
+                  </li>
+                {% endif %}</ul></div></div>
+          </li>
+          {% endfor %}
+
+        </ul>
+
+      </div>
+      </div>
+    </section>
     <script src="../../static/js/app.js"></script>
 
   </body>
@@ -66,3 +118,5 @@
       </div>
     </footer>
 </html>
+
+

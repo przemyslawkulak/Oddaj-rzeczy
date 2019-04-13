@@ -190,6 +190,7 @@ class ProfileUpdateView(LoginRequiredMixin, View):
     """
     view to update user's details
     """
+
     def get(self, request):
         text = 'Udana edycja danych'
         return redirect('profile')
@@ -199,6 +200,7 @@ class Donate1View(LoginRequiredMixin, View):
     """
     View with choosing type of given donations
     """
+
     def get(self, request):
         return render(request, 'app/form1.html')
 
@@ -225,6 +227,7 @@ class Donate2View(LoginRequiredMixin, View):
     """
     View to define amount of donation
     """
+
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -258,6 +261,7 @@ class Donate3View(LoginRequiredMixin, View):
     """
     View to select proper kind of institution, with searching engine
     """
+
     def get(self, request):
         if 'gift' in request.session:
             return render(request, 'app/form3.html')
@@ -326,6 +330,7 @@ class Donate4View(LoginRequiredMixin, View):
     """
     View to select one institution from list of chosen on previous view
     """
+
     def get(self, request):
         if request.session['find']:
             all_institution = Institution.objects.none()
@@ -356,6 +361,7 @@ class Donate5View(LoginRequiredMixin, View):
     """
     View to insert delivery pick up details
     """
+
     def get(self, request):
         form = GiftForm(request.POST)
         return render(request, 'app/form5.html', {'form': form})
@@ -383,6 +389,7 @@ class Donate6View(LoginRequiredMixin, View):
     """
     View with donate details
     """
+
     def get(self, request):
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
@@ -398,6 +405,7 @@ class Donate7View(LoginRequiredMixin, View):
     """
     View with thanks, deleting session variable
     """
+
     def get(self, request):
         if 'gift' in request.session:
             del request.session['gift']
@@ -405,6 +413,7 @@ class Donate7View(LoginRequiredMixin, View):
             del request.session['institution']
         if 'find' in request.session:
             del request.session['find']
+        Gift.objects.filter(donor=request.user).filter(institution=None).delete()
         return render(request, 'app/form7.html')
 
     def post(self, request):
@@ -415,6 +424,7 @@ class AddOrganizationView(LoginRequiredMixin, View):
     """
     View with form to add new institution
     """
+
     def get(self, request):
         form = OrganizationForm()
         return render(request, 'app/add_organization.html', {'form': form})
@@ -430,12 +440,19 @@ class AddOrganizationView(LoginRequiredMixin, View):
             type = form.cleaned_data['type']
             institution = Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
             send_mail(
-                    'Instytucja do zatwierdzenia',
-                    "Instytucja " + institution.name + " właśnie została utworzona. Proszę o zatwierdzenie",
-                    'racemate.app@gmail.com',
-                    ['przemyslaw.kulak86@gmail.com'],
-                    fail_silently=False,
-                )
+                'Instytucja do zatwierdzenia',
+                "Instytucja " + institution.name + " właśnie została utworzona. Proszę o zatwierdzenie",
+                'racemate.app@gmail.com',
+                ['przemyslaw.kulak86@gmail.com'],
+                fail_silently=False,
+            )
             return redirect('landing-page')
         text = "Uzupełnij wszystkie dane"
         return render(request, 'app/add_organization.html', {'text': text})
+
+
+class GiftListView(LoginRequiredMixin, View):
+    def get(self, request):
+        Gift.objects.filter(donor=request.user).filter(institution=None).delete()
+        all_gift = Gift.objects.filter(donor=request.user).order_by('date')
+        return render(request, 'app/gift_list.html', {'all_gift': all_gift})
