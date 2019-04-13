@@ -63,8 +63,9 @@
           <p>kurier przyjedzie w dogodnym terminie</p>
         </div>
       </div>
-
+    {% if auth %}{% else %}
       <a href="#" class="btn btn--large">Załóż konto</a>
+      {% endif %}
     </section>
 
     <section class="about-us" id="about-us">
@@ -90,38 +91,28 @@
         <p>W naszej bazie znajdziesz listę zweryfikowanych Fundacji, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.</p>
 
         <ul class="help--slides-items">
+          {% for i in all_institutions %}
           <li>
             <div class="col">
-              <div class="title">Fundacja "Dbam o Zdrowie"</div>
-              <div class="subtitle">Cel i misja: Pomoc dzieciom z ubogich rodzin.</div>
+              <div class="title">{{i.name}}</div>
+              <div class="subtitle">Cel i misja: {{i.mission}}</div>
             </div>
 
-            <div class="col"><div class="text">ubrania, jedzenie, sprzęt AGD, meble, zabawki</div></div>
+            <div class="col"><div class="text">{{i.city}} {{i.address}}</div></div>
           </li>
+          {% endfor %}
 
-          <li>
-            <div class="col">
-              <div class="title">Fundacja “Dla dzieci"</div>
-              <div class="subtitle">Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej.</div>
-            </div>
-
-            <div class="col"><div class="text">ubrania, meble, zabawki</div></div>
-          </li>
-
-          <li>
-            <div class="col">
-              <div class="title">Fundacja “Bez domu”</div>
-              <div class="subtitle">Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania</div>
-            </div>
-
-            <div class="col"><div class="text">ubrania, jedzenie, ciepłe koce</div></div>
-          </li>
         </ul>
-
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+              {% if all_institutions.has_previous %}
+          <li><a href="?page={{ all_institutions.previous_page_number }}" class="btn btn--small btn--without-border active">Poprzednia</a></li>
+          {% endif %}
+          {% for page in all_institutions.paginator.page_range %}
+          <li><a href="?page={{ page }}" class="btn btn--small btn--without-border" >{{ page }}</a></li>
+        {%  endfor %}
+          {% if all_institutions.has_next %}
+          <li><a href="?page={{ all_institutions.next_page_number }}" class="btn btn--small btn--without-border" >Następna</a></li>
+        {% endif %}
         </ul>
       </div>
 

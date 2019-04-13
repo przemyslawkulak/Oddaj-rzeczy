@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 from django.shortcuts import render, redirect
 
@@ -13,7 +14,12 @@ from app.models import Gift, Institution
 
 class LandingPageView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'app/index.html')
+        all_institutions = Institution.objects.all().order_by('name')
+        all_institutions_paginator = Paginator(all_institutions, 5)
+        page = request.GET.get('page')
+        a = all_institutions_paginator.get_page(page)
+
+        return render(request, 'app/index.html', {'all_institutions': a})
 
 
 class LoginView(View):
