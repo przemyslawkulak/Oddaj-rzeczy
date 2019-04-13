@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
 
 from django.shortcuts import render, redirect
@@ -8,7 +9,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views import View
 
-from app.forms import LoginForm, GiftForm
+from app.forms import LoginForm, GiftForm, ContactForm
 from app.models import Gift, Institution
 
 
@@ -21,6 +22,22 @@ class LandingPageView(LoginRequiredMixin, View):
 
         return render(request, 'app/index.html', {'all_institutions': all_institutions_paginator})
 
+    def post(self, request):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            surname = form.cleaned_data['surname']
+            content = form.cleaned_data['content']
+
+            send_mail(
+                ('Oddaj rzeczy ' + name+' '+surname),
+                content,
+                'racemate.app@gmail.com',
+                ['przemyslaw.kulak86@gmail.com'],
+                fail_silently=False,
+            )
+            return redirect('landing-page')
+        return redirect('landing-page')
 
 class LoginView(View):
     def get(self, request):

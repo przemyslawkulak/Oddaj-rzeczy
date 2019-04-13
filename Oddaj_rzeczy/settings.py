@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from Oddaj_rzeczy.local_settings import TEST
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -111,8 +112,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'racemate.app@gmail.com'
+EMAIL_HOST_PASSWORD = TEST
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
+EMAIL_PORT = 587
+
 try:
-    from Oddaj_rzeczy.local_settings import DATABASES
+    from Oddaj_rzeczy.local_settings import DATABASES, TEST
 except ModuleNotFoundError:
     print("Brak konfiguracji bazy danych w pliku local_settings.py!")
     print("Uzupełnij dane i spróbuj ponownie!")

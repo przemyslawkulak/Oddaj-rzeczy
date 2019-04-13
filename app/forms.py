@@ -28,3 +28,9 @@ class GiftForm(forms.ModelForm):
             'date': TextInput(attrs={'type': "date", 'name': "data"}),
             'time': TextInput(attrs={'type': "time", 'name': "time"}),
         }
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    surname = forms.CharField()
+    content = forms.CharField(widget=forms.Textarea)
