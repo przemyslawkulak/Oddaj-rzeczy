@@ -36,7 +36,7 @@ def send_email(request):
     return redirect('landing-page')
 
 
-class LandingPageView(LoginRequiredMixin, View):
+class LandingPageView(View):
     """
     Landing View with links to Donate Form, Adding Institution, Contact Form
     """
@@ -216,7 +216,7 @@ class Donate1View(LoginRequiredMixin, View):
         if request.POST.get('products5', False):
             others = 1
         g = Gift.objects.create(clothes_to_use=clothes_to_use, clothes_useless=clothes_useless,
-                                toys=toys, books=books, others=others)
+                                toys=toys, books=books, others=others, donor=request.user)
         request.session['gift'] = g.id
         return redirect('/donate2' + '#show')
 
@@ -372,6 +372,7 @@ class Donate5View(LoginRequiredMixin, View):
                 g.date = form.cleaned_data['date']
                 g.time = form.cleaned_data['time']
                 g.comments = form.cleaned_data['comments']
+                g.donor = request.user
                 g.save()
 
             return redirect('/donate6' + '#show')

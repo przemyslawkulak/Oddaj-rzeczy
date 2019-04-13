@@ -13,15 +13,22 @@
     <header>
       <nav class="container container--70">
         <ul class="nav--actions">
-           {% if user %}
-          <li><a href="{% url 'profile' %}" class="highlighted">Witaj {{user.username}} </a></li>
-           <li><a href="{% url 'logout' %}" class="highlighted"> Wyloguj</a></li>
-           {% else %}
+          {% if auth %}
+
+          <li class="logged-user">
+            Witaj {{user.username}}
+            <ul class="dropdown">
+              <li><a href="{% url 'profile' %}" class="btn btn--small btn--without-border">Edytuj dane</a></li>
+              <li><a href="#" class="btn btn--small btn--without-border">Ustawienia</a></li>
+              <li><a href="#" class="btn btn--small btn--without-border">Moje zbiórki</a></li>
+              <li><a href="{% url 'logout' %}" class="btn btn--small btn--without-border">Wyloguj</a></li>
+            </ul>
+          </li>
+          {% else %}
           <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+           <li><a href="{% url 'register' %}" class="btn btn--small btn--without-border">Załóż konto</a></li>
           {% endif %}
-             {% if not user %}
-          <li class="highlighted"><a href="{% url 'register' %}">Załóż konto</a></li>
-            {% endif %}
+
         </ul>
 
         <ul>
