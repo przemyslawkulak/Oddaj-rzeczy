@@ -3,7 +3,7 @@ from django.conf.global_settings import DATE_INPUT_FORMATS
 from django.forms import SplitDateTimeWidget, TextInput
 from suit.widgets import SuitSplitDateTimeWidget
 
-from app.models import Gift
+from app.models import Gift, Institution
 
 
 class LoginForm(forms.Form):
@@ -34,3 +34,15 @@ class ContactForm(forms.Form):
     name = forms.CharField()
     surname = forms.CharField()
     content = forms.CharField(widget=forms.Textarea)
+
+
+class OrganizationForm(forms.ModelForm):
+    class Meta:
+        model = Institution
+        exclude = ('approved',)
+        widgets = {
+            'name': TextInput(attrs={'type': "text", 'name': "name", 'placeholder': 'Name'}),
+            'address': TextInput(attrs={'type': "text", 'name': "address", 'placeholder': 'address'}),
+            'city': TextInput(attrs={'type': "text", 'name': "city", 'placeholder': 'city'}),
+            'mission': forms.Textarea(attrs={'placeholder': 'Mission'}),
+        }

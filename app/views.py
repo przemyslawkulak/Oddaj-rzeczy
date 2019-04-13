@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views import View
 
-from app.forms import LoginForm, GiftForm, ContactForm
+from app.forms import LoginForm, GiftForm, ContactForm, OrganizationForm
 from app.models import Gift, Institution
 
 
@@ -30,7 +30,7 @@ class LandingPageView(LoginRequiredMixin, View):
             content = form.cleaned_data['content']
 
             send_mail(
-                ('Oddaj rzeczy ' + name+' '+surname),
+                ('Oddaj rzeczy ' + name + ' ' + surname),
                 content,
                 'racemate.app@gmail.com',
                 ['przemyslaw.kulak86@gmail.com'],
@@ -38,6 +38,7 @@ class LandingPageView(LoginRequiredMixin, View):
             )
             return redirect('landing-page')
         return redirect('landing-page')
+
 
 class LoginView(View):
     def get(self, request):
@@ -340,3 +341,20 @@ class Donate7View(LoginRequiredMixin, View):
         if 'find' in request.session:
             del request.session['find']
         return render(request, 'app/form7.html')
+
+
+class AddOrganizationView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = OrganizationForm()
+        return render(request, 'app/add_organization.html', {'form': form})
+
+    def post(self, request):
+        form = OrganizationForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            address = form.cleaned_data['address']
+            city = form.cleaned_data['city']
+            mission = form.cleaned_data['mission']
+            type = form.cleaned_data['type']
+            Institution.objects.create(name=name, address=address, city=city, mission=mission, type=type)
+            return redirect('landing-page')
