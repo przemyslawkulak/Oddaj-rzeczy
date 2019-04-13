@@ -1,7 +1,5 @@
 from django import forms
-from django.conf.global_settings import DATE_INPUT_FORMATS
-from django.forms import SplitDateTimeWidget, TextInput
-from suit.widgets import SuitSplitDateTimeWidget
+from django.forms import TextInput
 
 from app.models import Gift, Institution
 
