@@ -218,21 +218,20 @@ class Donate3View(LoginRequiredMixin, View):
 
     def post(self, request):
         if request.POST.get('organization_search', False):
-            all_institution = Institution.objects.filter(name__icontains=request.POST.get('organization_search'))
-            print(request.POST['localization'])
+            all_institution = Institution.objects.filter(
+                name__icontains=request.POST.get('organization_search')).filter(approved=True)
+
 
             if request.POST['localization'] == '0':
                 id_list = []
-                print(all_institution)
+
                 for i in all_institution:
                     id_list.append(i.pk)
-                print(id_list)
                 request.session['find'] = id_list
                 return redirect('donate4')
             else:
                 city = request.POST['localization']
-                print(all_institution)
-                all_institution = all_institution.filter(city=city)
+                all_institution = all_institution.filter(city=city).filter(approved=True)
                 id_list = []
                 for i in all_institution:
                     id_list.append(i.pk)
@@ -243,15 +242,15 @@ class Donate3View(LoginRequiredMixin, View):
                                                          Institution.objects.none(), Institution.objects.none(), \
                                                          Institution.objects.none()
             if request.POST.get('children', False):
-                children = Institution.objects.filter(type=1)
+                children = Institution.objects.filter(type=1).filter(approved=True)
             if request.POST.get('mothers', False):
-                mothers = Institution.objects.filter(type=2)
+                mothers = Institution.objects.filter(type=2).filter(approved=True)
             if request.POST.get('homeless', False):
-                homeless = Institution.objects.filter(type=3)
+                homeless = Institution.objects.filter(type=3).filter(approved=True)
             if request.POST.get('disabled', False):
-                disabled = Institution.objects.filter(type=4)
+                disabled = Institution.objects.filter(type=4).filter(approved=True)
             if request.POST.get('old', False):
-                old = Institution.objects.filter(type=5)
+                old = Institution.objects.filter(type=5).filter(approved=True)
             all_institution = Institution.objects.none()
             all_institution = all_institution | children
             all_institution = all_institution | mothers
@@ -267,7 +266,7 @@ class Donate3View(LoginRequiredMixin, View):
 
             else:
                 city = request.POST['localization']
-                all_institution = all_institution.filter(city=city)
+                all_institution = all_institution.filter(city=city).filter(approved=True)
                 id_list = []
                 for i in all_institution:
                     id_list.append(i.pk)
@@ -280,7 +279,7 @@ class Donate4View(LoginRequiredMixin, View):
         if request.session['find']:
             all_institution = Institution.objects.none()
             for i in request.session['find']:
-                all_institution = all_institution | Institution.objects.filter(id=i)
+                all_institution = all_institution | Institution.objects.filter(id=i).filter(approved=True)
             return render(request, 'app/form4.html', {'all_institution': all_institution})
         else:
             all_institution = Institution.objects.none()
@@ -291,9 +290,8 @@ class Donate4View(LoginRequiredMixin, View):
         request.session['institution'] = i
         if 'gift' in request.session:
             g = Gift.objects.get(id=request.session['gift'])
-            g.institution = Institution.objects.get(id=i)
+            g.institution = Institution.objects.get(id=i).filter(approved=True)
             g.save()
-            print(i)
             return redirect('/donate5' + '#show')
         return redirect('donate1')
 
