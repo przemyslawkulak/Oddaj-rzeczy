@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-from Oddaj_rzeczy.local_settings import TEST
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&zyd(@pc&3ry9@-7!za6!=es((mrj6!bm==3(v^&9gw(u*f9jq'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'oddaj-rzeczy.herokuapp.com']
 
 # Application definition
 
@@ -110,19 +110,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'racemate.app@gmail.com'
-EMAIL_HOST_PASSWORD = TEST
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
-EMAIL_PORT = 587
 
 try:
-    from Oddaj_rzeczy.local_settings import DATABASES, TEST
+    from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
 except ModuleNotFoundError:
-    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
-    print("Uzupełnij dane i spróbuj ponownie!")
-    exit(0)
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'racemate.app@gmail.com'
+    # EMAIL_HOST_PASSWORD = TEST
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
+    EMAIL_PORT = 587
+
+    DATABASES = {
+        'default': {
+            'HOST': '127.0.0.1',
+            'NAME': 'oddaj',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'USER': os.environ.get('USER', 'default'),
+            'PASSWORD': os.environ.get('PASSWORD', 'default'),
+        }
+    }
+
+    DEBUG = False
+
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
+
+

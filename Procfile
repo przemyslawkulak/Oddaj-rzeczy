@@ -1,0 +1,1 @@
+web: gunicorn Oddaj_rzeczy.wsgi:application --log-file -
