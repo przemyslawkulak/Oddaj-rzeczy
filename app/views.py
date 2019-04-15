@@ -43,7 +43,9 @@ class LandingPageView(View):
 
     def get(self, request):
         all_institutions = Institution.objects.all().filter(approved=True).order_by('?')
+
         gifts = Gift.objects.all().filter(given=True)
+
         bags = 0
         for g in gifts:
             bags += g.clothes_to_use
@@ -51,7 +53,7 @@ class LandingPageView(View):
             bags += g.toys
             bags += g.books
             bags += g.others
-        print(bags)
+
         p = Paginator(all_institutions, 5)
         page = request.GET.get('page')
         all_institutions_paginator = p.get_page(page)
