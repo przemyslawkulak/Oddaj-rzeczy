@@ -114,17 +114,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-try:
-    from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
-except ModuleNotFoundError:
-    EMAIL_USE_TLS = True
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = 'racemate.app@gmail.com'
-    # EMAIL_HOST_PASSWORD = TEST
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
-    EMAIL_PORT = 587
-
-    DATABASES = {
+DATABASES = {
         'default': {
             'HOST': 'ec2-54-228-252-67.eu-west-1.compute.amazonaws.com',
             'NAME': 'ddqqi6ec6oqqun',
@@ -134,6 +124,17 @@ except ModuleNotFoundError:
             'Port': 5432,
         }
     }
+
+try:
+    from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
+except ModuleNotFoundError:
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'racemate.app@gmail.com'
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
+    EMAIL_PORT = 587
+
+
 
     DEBUG = True
 
