@@ -127,7 +127,7 @@ except ModuleNotFoundError:
     DATABASES = {
         'default': {
             'HOST': 'ec2-54-228-252-67.eu-west-1.compute.amazonaws.com',
-            'NAME': 'ddqqi6ec6oqqun',
+            'NAME': 'wprnmykrgdrlke',
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'USER': os.environ.get('USER', 'default'),
             'PASSWORD': os.environ.get('PASSWORD', 'default'),
