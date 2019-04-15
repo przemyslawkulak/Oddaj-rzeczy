@@ -125,7 +125,15 @@ except ModuleNotFoundError:
     EMAIL_HOST_USER = 'racemate.app@gmail.com'
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
     EMAIL_PORT = 587
-
+    DATABASES = {
+        'default': {
+            'HOST': 'ec2-54-228-252-67.eu-west-1.compute.amazonaws.com',
+            'NAME': 'ddqqi6ec6oqqun',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'USER': 'wprnmykrgdrlke',
+            'PASSWORD': os.environ.get('PASSWORD', 'default'),
+        }
+    }
     DEBUG = True
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
