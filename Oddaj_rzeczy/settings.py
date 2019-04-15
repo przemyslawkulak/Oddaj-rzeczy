@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import DATABASES as DATABASES
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -114,6 +116,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2'}}
 
 try:
     from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
@@ -123,8 +126,6 @@ except ModuleNotFoundError:
     EMAIL_HOST_USER = 'racemate.app@gmail.com'
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
     EMAIL_PORT = 587
-
-
 
     DEBUG = True
 
