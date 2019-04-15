@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -76,7 +75,6 @@ WSGI_APPLICATION = 'Oddaj_rzeczy.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -116,8 +114,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-
 try:
     from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
 except ModuleNotFoundError:
@@ -130,16 +126,15 @@ except ModuleNotFoundError:
 
     DATABASES = {
         'default': {
-            'HOST': '127.0.0.1',
-            'NAME': 'oddaj',
+            'HOST': 'ec2-54-228-252-67.eu-west-1.compute.amazonaws.com',
+            'NAME': 'ddqqi6ec6oqqun',
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'USER': os.environ.get('USER', 'default'),
             'PASSWORD': os.environ.get('PASSWORD', 'default'),
+            'Port': 5432,
         }
     }
 
     DEBUG = True
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
-
-
