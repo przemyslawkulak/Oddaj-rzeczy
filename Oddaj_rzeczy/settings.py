@@ -114,16 +114,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DATABASES = {
-        'default': {
-            'HOST': 'ec2-54-228-252-67.eu-west-1.compute.amazonaws.com',
-            'NAME': 'ddqqi6ec6oqqun',
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER': os.environ.get('USER', 'default'),
-            'PASSWORD': os.environ.get('PASSWORD', 'default'),
-            'Port': 5432,
-        }
-    }
 
 try:
     from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
