@@ -127,8 +127,8 @@ except ModuleNotFoundError:
     EMAIL_PORT = 587
     import dj_database_url
 
-    DATABASES['default'] = dj_database_url.config
-    
+    DATABASES['default'] = dj_database_url.config()
+
     DEBUG = True
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
