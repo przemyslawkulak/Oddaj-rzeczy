@@ -118,6 +118,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 try:
     from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
 except ModuleNotFoundError:
+    import dj_database_url
+
+    DATABASES['default'] = dj_database_url.config()
     EMAIL_USE_TLS = True
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = 'racemate.app@gmail.com'
