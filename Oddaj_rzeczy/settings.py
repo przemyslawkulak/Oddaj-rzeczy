@@ -129,6 +129,6 @@ except ModuleNotFoundError:
 
     DATABASES['default'] = dj_database_url.config()
 
-    DEBUG = True
+    DEBUG = False
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
