@@ -71,7 +71,7 @@ class LandingPageView(View):
 
 class LoginView(View):
     """
-    login view - if succesful redirect to landing page
+    login view - if successful redirect to landing page
     """
 
     def get(self, request):
@@ -81,7 +81,6 @@ class LoginView(View):
         form = LoginForm(request.POST)
         if form.is_valid():
             user = authenticate(username=form['login'].value(),
-                                # wyciągamy login i hasło z formularza i logujemy
                                 password=form['password'].value())
             if user:
                 login(request, user)  # logujemy
@@ -124,22 +123,25 @@ class RegisterView(View):
         for i in users:
             emails.append(i.email)
             usernames.append(i.username)
-        if username and email and name and surname and password and confirm_password and password == confirm_password:
-            if username in usernames:
-                text = 'Podany user już istnieje'
-                return render(request, 'app/register.html', {"text": text})
-            elif email in emails:
-                text = 'Podany email już istnieje'
-                return render(request, 'app/register.html', {"text": text})
-            else:
-                User.objects.create_user(username=username,
-                                         email=email,
-                                         first_name=name,
-                                         last_name=surname,
-                                         password=password,
-                                         )
-                return redirect('login')
-        text = 'Żle powtórzone hasło'
+        if username and email and password and confirm_password and name and surname:
+            if password == confirm_password:
+                if username in usernames:
+                    text = 'Podany user już istnieje'
+                    return render(request, 'app/register.html', {"text": text})
+                elif email in emails:
+                    text = 'Podany email już istnieje'
+                    return render(request, 'app/register.html', {"text": text})
+                else:
+                    User.objects.create_user(username=username,
+                                             email=email,
+                                             first_name=name,
+                                             last_name=surname,
+                                             password=password,
+                                             )
+                    return redirect('login')
+            text = 'Żle powtórzone hasło'
+            return render(request, 'app/register.html', {"text": text})
+        text = 'Uzupełnij wszystkie dane'
         return render(request, 'app/register.html', {"text": text})
 
 

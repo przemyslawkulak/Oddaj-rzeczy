@@ -2,7 +2,7 @@ import unittest
 
 from django.contrib.auth.models import User
 from django.test import Client
-from parameterized import parameterized_class, parameterized
+from parameterized import parameterized
 
 from app.models import Institution, Gift
 
@@ -88,6 +88,64 @@ class LoginTestCase(unittest.TestCase):
         self.client.login(username=username, password=password)
         response = self.client.get('/accounts/login/')
         self.assertNotEquals(response.context['user'].username, 'Testowy2')
+
+    def tearDown(self):
+        User.objects.all().delete()
+
+
+class LogoutTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        self.user = User.objects.create_user(username='TestUser', email='test@test.com', password='testpassword')
+
+    def test_logout(self):
+        self.client.login(username='TestUser', password='testpassword')
+        # Log out
+        response = self.client.get('/logout/')
+        # check response code
+        self.assertEquals(response.url, '/accounts/login/')
+
+    def tearDown(self):
+        User.objects.all().delete()
+
+
+class RegisterViewTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='test_user', password='test_password',
+                                             email='test@test.com')
+
+    def test_correct_register_get(self):
+        response = self.client.get('/register/')
+        self.assertEquals(response.status_code, 200)
+
+    def test_saving_user(self):
+        response = self.client.post('/register/',
+                                    {'username': 'test_user', 'password': 'test_password',
+                                     "email": 'test@test.com',
+                                     'confirmPassword': 'test_password'})
+
+        # check proper response status code
+        self.assertEqual(response.status_code, 200)
+
+    @parameterized.expand([
+        ['test_user', 'test_password', 'test@test.com', 'test_password', 'Podany user już istnieje'],
+        ['test_user2', 'test_password', 'test@test.com', 'test_password', 'Podany email już istnieje'],
+        ['test_user', 'test_password', 'test@test.com', 'test_password2', 'Żle powtórzone hasło'],
+        ['', 'test_password', 'test@test.com', 'test_password', 'Uzupełnij wszystkie dane'],
+        ['test_user', '', 'test@test.com', 'test_password', 'Uzupełnij wszystkie dane'],
+        ['test_user', 'test_password', '', 'test_password', 'Uzupełnij wszystkie dane'],
+        ['test_user', 'test_password', 'test@test.com', '', 'Uzupełnij wszystkie dane'],
+    ])
+    def test_register_form(self, username, password, email, confirm_password, text):
+        response = self.client.post('/register/',
+                                    {'login': username, 'password': password, 'name': 'test', 'surname': 'test',
+                                     "email": email,
+                                     'password2': confirm_password})
+        self.assertEqual(response.context['text'], text)
 
     def tearDown(self):
         User.objects.all().delete()
