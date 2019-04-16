@@ -44,7 +44,7 @@ class LandingPageView(View):
     def get(self, request):
         all_institutions = Institution.objects.all().filter(approved=True).order_by('?')
 
-        gifts = Gift.objects.all().filter(given=True)
+        gifts = Gift.objects.filter(given=True)
 
         bags = 0
         for g in gifts:
@@ -65,7 +65,7 @@ class LandingPageView(View):
 
     def post(self, request):
         send_email(request)
-        return redirect('landing-page')
+        return redirect('/' + '#contact')
 
 
 class LoginView(View):
@@ -220,19 +220,19 @@ class Donate1View(LoginRequiredMixin, View):
 
     def post(self, request):
         send_email(request)
-        clothes_to_use, clothes_useless, toys, books, others = 0, 0, 0, 0, 0
+        g = Gift.objects.create(clothes_to_use=0, clothes_useless=0,
+                                toys=0, books=0, others=0, donor=request.user)
         if request.POST.get('products1', False):
-            clothes_to_use = 1
+            g.clothes_to_use = 1
         if request.POST.get('products2', False):
-            clothes_useless = 1
+            g.clothes_useless = 1
         if request.POST.get('products3', False):
-            toys = 1
+            g.toys = 1
         if request.POST.get('products4', False):
-            books = 1
+            g.books = 1
         if request.POST.get('products5', False):
-            others = 1
-        g = Gift.objects.create(clothes_to_use=clothes_to_use, clothes_useless=clothes_useless,
-                                toys=toys, books=books, others=others, donor=request.user)
+            g.others = 1
+        g.save()
         request.session['gift'] = g.id
         return redirect('/donate2' + '#show')
 

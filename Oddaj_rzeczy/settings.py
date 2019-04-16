@@ -118,13 +118,18 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2'}}
 
-
-
 try:
     from Oddaj_rzeczy.local_settings import DATABASES, TEST, SECRET_KEY, DEBUG
 
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'racemate.app@gmail.com'
+    EMAIL_HOST_PASSWORD = TEST
+    EMAIL_PORT = 587
+
     if 'test' in sys.argv:
         DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
+
 except ModuleNotFoundError:
     EMAIL_USE_TLS = True
     EMAIL_HOST = 'smtp.gmail.com'
