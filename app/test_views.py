@@ -1,15 +1,13 @@
-import sys
 import unittest
 
+from django.contrib.auth.models import User
 from django.test import Client
-import sys
+from parameterized import parameterized_class, parameterized
 
 from app.models import Institution, Gift
 
-print(sys.version)
 
-
-class LoginTestCase(unittest.TestCase):
+class LandingPageTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -49,11 +47,50 @@ class LoginTestCase(unittest.TestCase):
 
     def test_correct_landing_page(self):
         response = self.client.post('/')
-        self.assertEquals(response.url, '/landing-page#contact')
+        self.assertEquals(response.url, '/#contact')
 
     def tearDown(self):
         Institution.objects.all().delete()
         Gift.objects.all().delete()
+
+
+class LoginTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='TestUser', email='test@test.com', password='testpassword')
+
+    def test_correct_login(self):
+        # Check response code for login user
+        self.client.login(username='TestUser', password='testpassword')
+        response = self.client.get('/accounts/login/')
+        self.assertEquals(response.status_code, 200)
+
+        # check corect user name in response context
+
+        self.assertEquals(response.context['user'].username, 'TestUser')
+
+        # check if user is not anonymous
+        self.assertFalse(self.user.is_anonymous)
+
+        # check logout
+        response = self.client.get('/logout/')
+        self.assertIsNone(response.context)
+
+    @parameterized.expand([{"username": "TestUser2",
+                            "password": "testpassword"
+                            },
+                           {"username": "TestUser",
+                            "password": "testpassword2"
+                            }])
+    def test_incorrect_login(self, username, password):
+        # Check incorect data for user
+        self.client.login(username=username, password=password)
+        response = self.client.get('/accounts/login/')
+        self.assertNotEquals(response.context['user'].username, 'Testowy2')
+
+    def tearDown(self):
+        User.objects.all().delete()
 
 
 if __name__ == '__main__':
