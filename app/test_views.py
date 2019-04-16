@@ -151,5 +151,20 @@ class RegisterViewTestCase(unittest.TestCase):
         User.objects.all().delete()
 
 
+class ProfileViewTestCase(unittest.TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='test_user', password='test_password',
+                                             email='test@test.com')
+
+    def test_correct_profile_get(self):
+        self.client.login(username='test_user', password='test_password')
+        response = self.client.get('/profile/')
+        self.assertEquals(response.status_code, 200)
+
+    def tearDown(self):
+        User.objects.all().delete()
+
+
 if __name__ == '__main__':
     unittest.main()
