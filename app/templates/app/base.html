@@ -46,7 +46,11 @@
   </body>
 <footer>
       <div class="contact" id="contact">
-        <h2>Skontaktuj się z nami</h2>
+        {% if request.session.text %}
+          <h2>{{ request.session.text }}</h2>
+          {% else %}
+          <h2>Skontaktuj się z nami</h2>
+
         <h3>Formularz kontaktowy</h3>
         <form class="form--contact" method="POST">
             {% csrf_token %}
@@ -63,6 +67,7 @@
         <div class="bottom-line--icons">
           <a href="#" class="btn btn--small"><img src="../../static/images/icon-facebook.svg"/></a> <a href="#" class="btn btn--small"><img src="../../static/images/icon-instagram.svg"/></a>
         </div>
+          {% endif %}
       </div>
     </footer>
 </html>

@@ -57,7 +57,6 @@ class LandingPageView(View):
         p = Paginator(all_institutions, 5)
         page = request.GET.get('page')
         all_institutions_paginator = p.get_page(page)
-
         return render(request, 'app/index.html', {'all_institutions': all_institutions_paginator,
                                                   'all_institutions_count': all_institutions.count(),
                                                   'gifts': gifts.count(),
@@ -65,6 +64,8 @@ class LandingPageView(View):
 
     def post(self, request):
         send_email(request)
+        request.session['text'] = "Wiadomość została wysłana"
+        request.session.set_expiry(300)
         return redirect('/' + '#contact')
 
 
