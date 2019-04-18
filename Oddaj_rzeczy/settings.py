@@ -131,10 +131,11 @@ try:
         DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
 except ModuleNotFoundError:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_USE_TLS = True
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = 'racemate.app@gmail.com'
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
     EMAIL_PORT = 587
 
     import dj_database_url
@@ -144,3 +145,5 @@ except ModuleNotFoundError:
     DEBUG = False
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default')
+
+
