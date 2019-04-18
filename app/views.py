@@ -30,7 +30,7 @@ def send_email(request):
             content,
             'racemate.app@gmail.com',
             ['przemyslaw.kulak86@gmail.com'],
-            fail_silently=False,
+            fail_silently=True,
         )
         return redirect('landing-page')
     return redirect('landing-page')
